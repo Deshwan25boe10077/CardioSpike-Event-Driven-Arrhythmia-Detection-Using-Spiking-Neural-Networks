@@ -1,71 +1,93 @@
-# CardioSpike: Event-Driven Arrhythmia Detection Using Spiking Neural Networks
+# ❤️ CardioSpike
+### Event-Driven Arrhythmia Detection Using Spiking Neural Networks
 
-## Overview
+[![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)]()
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.x-red.svg)]()
+[![snnTorch](https://img.shields.io/badge/snnTorch-SNN_Framework-green.svg)]()
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)]()
 
-CardioSpike is a research-oriented project that leverages **Spiking Neural Networks (SNNs)** for efficient and biologically inspired detection of cardiac arrhythmias from Electrocardiogram (ECG) signals. Unlike traditional Artificial Neural Networks (ANNs), SNNs process information through discrete spikes, enabling event-driven computation with significantly lower energy consumption and improved suitability for edge and neuromorphic hardware.
+## 📖 Abstract
 
-The project aims to classify ECG recordings into normal and abnormal heart rhythms while maintaining high accuracy and computational efficiency.
+Cardiovascular diseases remain one of the leading causes of mortality worldwide, making early and accurate detection of cardiac abnormalities essential. Traditional deep learning approaches for Electrocardiogram (ECG) analysis often require substantial computational resources and energy consumption, limiting their deployment on wearable and edge devices.
+
+**CardioSpike** introduces an event-driven arrhythmia detection framework based on **Spiking Neural Networks (SNNs)**, which mimic the information processing mechanism of biological neurons. By converting ECG signals into spike trains and leveraging temporal dynamics, CardioSpike aims to achieve accurate arrhythmia classification while significantly reducing computational overhead and power consumption.
+
+This project explores the application of neuromorphic computing principles to healthcare, enabling intelligent and energy-efficient cardiac monitoring systems suitable for real-time deployment.
 
 ---
 
-## Features
+## 🎯 Problem Statement
 
-- Event-driven ECG signal processing
-- ECG-to-spike encoding techniques
-- Spiking Neural Network architecture for arrhythmia classification
-- Support for multiple arrhythmia classes
+Current ECG classification systems based on Artificial Neural Networks (ANNs) provide high accuracy but often suffer from:
+
+- High energy consumption
+- Large memory requirements
+- Limited suitability for edge devices
+- Reduced biological plausibility
+
+CardioSpike addresses these challenges through:
+
+- Event-driven computation
+- Sparse neural activity
+- Temporal information encoding
 - Energy-efficient inference
-- Training and evaluation pipeline
-- Performance visualization and analysis tools
-- Compatible with neuromorphic computing research workflows
 
 ---
 
-## Project Objectives
+## 🚀 Key Features
 
-1. Preprocess raw ECG signals.
-2. Convert continuous ECG waveforms into spike trains.
-3. Train Spiking Neural Networks for arrhythmia classification.
-4. Evaluate model performance using standard medical metrics.
-5. Compare SNN performance with conventional deep learning approaches.
-6. Investigate energy efficiency benefits of event-driven computing.
-
----
-
-## Dataset
-
-The project can be trained and evaluated using publicly available ECG datasets such as:
-
-- MIT-BIH Arrhythmia Database
-- PTB Diagnostic ECG Database
-- PhysioNet ECG Collections
-
-### Example Classes
-
-- Normal Sinus Rhythm (NSR)
-- Premature Ventricular Contractions (PVC)
-- Atrial Fibrillation (AF)
-- Ventricular Tachycardia (VT)
-- Other clinically relevant arrhythmias
+- ECG signal preprocessing pipeline
+- Spike encoding of continuous ECG waveforms
+- Spiking Neural Network architecture
+- Multi-class arrhythmia classification
+- Event-driven inference
+- Model training and evaluation framework
+- Performance visualization
+- Research-oriented modular architecture
+- Neuromorphic computing compatibility
+- Edge AI deployment potential
 
 ---
 
-## System Architecture
+## 🧠 Why Spiking Neural Networks?
+
+Unlike conventional neural networks that process continuous values, SNNs communicate through discrete spikes.
+
+### Advantages
+
+✅ Lower energy consumption
+
+✅ Temporal pattern recognition
+
+✅ Sparse computation
+
+✅ Biological plausibility
+
+✅ Neuromorphic hardware compatibility
+
+These characteristics make SNNs highly suitable for wearable healthcare applications where power efficiency is critical.
+
+---
+
+## 🏗️ System Architecture
 
 ```text
-Raw ECG Signal
-       │
-       ▼
- Signal Preprocessing
-       │
-       ▼
- Spike Encoding
-       │
-       ▼
- Spiking Neural Network
-       │
-       ▼
- Classification Layer
-       │
-       ▼
- Arrhythmia Prediction
+                   ECG Signal
+                        │
+                        ▼
+              Signal Preprocessing
+                        │
+                        ▼
+                 Spike Encoding
+                        │
+                        ▼
+             Spiking Neural Network
+                        │
+                        ▼
+               Feature Extraction
+                        │
+                        ▼
+              Arrhythmia Classifier
+                        │
+                        ▼
+                Predicted Class
