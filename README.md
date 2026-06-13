@@ -72,6 +72,7 @@ These characteristics make SNNs highly suitable for wearable healthcare applicat
 ## 🏗️ System Architecture
 
 •	This is how our model works on converting the ECG signals to spike trains so that we can overcome the complexities of the standard ECG 
+
 •	Since ECG signals are defined by distinct temporal shapes (like the P-wave, QRS complex, and T-wave), the goal of an event encoder is to capture these precise     amplitude changes over time while discarding redundant, static data.
 
 
