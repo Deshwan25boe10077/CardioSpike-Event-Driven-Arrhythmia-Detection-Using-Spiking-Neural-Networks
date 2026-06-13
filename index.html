@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>CardioSpike - Arrhythmia Detection System</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #e8e8e8;
+      padding: 20px;
+      color: #333;
+    }
+
+    .header {
+      background-color: #003366;
+      color: #fff;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 2px solid #001a33;
+    }
+
+    .header h1 {
+      font-size: 18px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .header p {
+      font-size: 11px;
+      margin-top: 5px;
+      opacity: 0.9;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .panel {
+      background-color: #f5f5f5;
+      border: 1px solid #999;
+      padding: 15px;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .panel-title {
+      background-color: #cccccc;
+      border-bottom: 1px solid #999;
+      padding: 8px;
+      margin: -15px -15px 15px -15px;
+      font-weight: bold;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .graph-container {
+      width: 100%;
+      height: 300px;
+      border: 1px solid #999;
+      background-color: #fff;
+      position: relative;
+      margin-bottom: 15px;
+    }
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .grid-line {
+      stroke: #ddd;
+      stroke-width: 0.5;
+    }
+
+    .axis {
+      stroke: #000;
+      stroke-width: 1.5;
+    }
+
+    .signal-line {
+      stroke: #006633;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 8px 15px;
+      background-color: #003366;
+      color: #fff;
+      border: 1px solid #001a33;
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    button:hover {
+      background-color: #004d80;
+    }
+
+    button:active {
+      background-color: #001a33;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .data-table th {
+      background-color: #cccccc;
+      border: 1px solid #999;
+      padding: 8px;
+      text-align: left;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 10px;
+    }
+
+    .data-table td {
+      border: 1px solid #999;
+      padding: 8px;
+      background-color: #fff;
+    }
+
+    .data-table tr:nth-child(even) td {
+      background-color: #f9f9f9;
+    }
+
+    .result-box {
+      background-color: #f0f0f0;
+      border: 1px solid #999;
+      padding: 12px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .result-box.active {
+      display: block;
+      border-left: 4px solid #006633;
+    }
+
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px dotted #ccc;
+      font-size: 11px;
+    }
+
+    .result-row:last-child {
+      border-bottom: none;
+    }
+
+    .label {
+      font-weight: bold;
+      color: #003366;
+    }
+
+    .value {
+      text-align: right;
+      font-family: monospace;
+    }
+
+    .status {
+      font-size: 13px;
+      font-weight: bold;
+      padding: 10px;
+      text-align: center;
+      margin-top: 10px;
+      background-color: #fff;
+      border: 1px solid #999;
+    }
+
+    .status.normal {
+      background-color: #ccffcc;
+      color: #003300;
+    }
+
+    .status.arrhythmia {
+      background-color: #ffcccc;
+      color: #330000;
+    }
+
+    .analyze-button {
+      width: 100%;
+      padding: 12px !important;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 1024px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <h1>CARDIO SPIKE - ARRHYTHMIA DETECTION SYSTEM</h1>
+    <p>Convolutional Neural Network Analysis | v1.0</p>
+  </div>
+
+  <div class="container">
+    <!-- ECG Input Panel -->
+    <div class="panel">
+      <div class="panel-title">ECG Signal Input</div>
+
+      <div class="controls">
+        <button onclick="loadNormalECG()">Load Normal</button>
+        <button onclick="loadArrhythmicECG()">Load Arrhythmic</button>
+        <button onclick="clearData()">Clear</button>
+      </div>
+
+      <div class="graph-container">
+        <svg id="ecgSvg">
+          <defs>
+            <pattern id="grid" width="40" height="30" patternUnits="userSpaceOnUse">
+              <line class="grid-line" x1="40" y1="0" x2="40" y2="30" />
+              <line class="grid-line" x1="0" y1="30" x2="40" y2="30" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid)" />
+          <line class="axis" x1="30" y1="0" x2="30" y2="300" />
+          <line class="axis" x1="30" y1="270" x2="600" y2="270" />
+          <polyline class="signal-line" id="signalPath" points="" />
+        </svg>
+      </div>
+
+      <table class="data-table">
+        <tr>
+          <th>Parameter</th>
+          <th>Value</th>
+        </tr>
+        <tr>
+          <td>Samples</td>
+          <td id="sampleCount">0</td>
+        </tr>
+        <tr>
+          <td>Min Voltage</td>
+          <td id="minVolt">0.00 mV</td>
+        </tr>
+        <tr>
+          <td>Max Voltage</td>
+          <td id="maxVolt">0.00 mV</td>
+        </tr>
+        <tr>
+          <td>Range</td>
+          <td id="rangeVolt">0.00 mV</td>
+        </tr>
+      </table>
+
+      <button class="analyze-button" onclick="predictArrhythmia()">
+        ANALYZE SIGNAL
+      </button>
+    </div>
+
+    <!-- Results Panel -->
+    <div class="panel">
+      <div class="panel-title">Analysis Results</div>
+
+      <div class="result-box" id="resultBox">
+        <div class="result-row">
+          <span class="label">Classification:</span>
+          <span class="value" id="predClass">--</span>
+        </div>
+        <div class="result-row">
+          <span class="label">Normal Probability:</span>
+          <span class="value" id="probNormal">--</span>
+        </div>
+        <div class="result-row">
+          <span class="label">Arrhythmia Probability:</span>
+          <span class="value" id="probArrhythmia">--</span>
+        </div>
+        <div class="result-row">
+          <span class="label">Processing Time:</span>
+          <span class="value" id="inferenceTime">--</span>
+        </div>
+        <div class="result-row">
+          <span class="label">Model Confidence:</span>
+          <span class="value" id="confidence">--</span>
+        </div>
+      </div>
+
+      <div class="status" id="statusBox" style="display: none;">
+        <span id="statusText">READY</span>
+      </div>
+
+      <div style="margin-top: 15px; font-size: 11px; color: #666; line-height: 1.6;">
+        <strong>System Status:</strong><br>
+        Status: <span id="systemStatus">Online</span><br>
+        Last Analysis: <span id="lastAnalysis">None</span><br>
+        <br>
+        <strong>Instructions:</strong><br>
+        1. Click "Load Normal" or "Load Arrhythmic"<br>
+        2. View ECG signal in graph<br>
+        3. Click "ANALYZE SIGNAL" button<br>
+        4. View classification results<br>
+        <br>
+        <strong>About:</strong><br>
+        CardioSpike uses deep learning to<br>
+        classify cardiac rhythms. High<br>
+        confidence indicates reliable<br>
+        classification decision.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let ecgData = [];
+    let lastAnalysisTime = null;
+
+    function loadNormalECG() {
+      ecgData = [];
+      for (let i = 0; i < 500; i++) {
+        const t = i / 250; ecgData.push(0.3 * Math.sin(2 * Math.PI * 1.2 * t) + 0.7 *
+          Math.sin(2 * Math.PI * 4.5 * t) + 0.25 * Math.sin(2 * Math.PI * 1.8 * t) + 0.02 * (Math.random() - 0.5));
+      } const
+        min = Math.min(...ecgData); ecgData = ecgData.map(x => x - min + 1);
+      updateGraph();
+      updateDataTable();
+      console.log("Loaded: NORMAL ECG");
+    }
+
+    function loadArrhythmicECG() {
+      ecgData = [];
+      for (let i = 0; i < 500; i++) {
+        const t = i / 250; const ampShift = 0.5 * Math.sin(2 * Math.PI * 0.5 * i / 500); if (i
+          % 150 === 0) {
+            ecgData.push(0.1 * Math.sin(2 * Math.PI * 3.2 * t) + 1.8 * Math.sin(2 * Math.PI * 7.5 * t) + 0.2 *
+              Math.sin(2 * Math.PI * 2.8 * t));
+        } else {
+          ecgData.push((0.3 + ampShift) * Math.sin(2 * Math.PI * (1.2 +
+            1.5 * ampShift) * t) + (0.8 + ampShift) * Math.sin(2 * Math.PI * (4.5 + 2 * ampShift) * t) + (0.4 + ampShift) *
+            Math.sin(2 * Math.PI * (1.5 + ampShift) * t) + (Math.random() - 0.5) * 0.3);
+        }
+      } const
+        min = Math.min(...ecgData); ecgData = ecgData.map(x => x - min + 1);
+      updateGraph();
+      updateDataTable();
+      console.log("Loaded: ARRHYTHMIC ECG");
+    }
+
+    function clearData() {
+      ecgData = [];
+      document.getElementById('signalPath').setAttribute('points', '');
+      document.getElementById('sampleCount').textContent = '0';
+      document.getElementById('minVolt').textContent = '0.00 mV';
+      document.getElementById('maxVolt').textContent = '0.00 mV';
+      document.getElementById('rangeVolt').textContent = '0.00 mV';
+      document.getElementById('resultBox').classList.remove('active');
+      document.getElementById('statusBox').style.display = 'none';
+    }
+
+    function updateGraph() {
+      if (ecgData.length === 0) return;
+
+      const svg = document.getElementById('ecgSvg');
+      const width = svg.clientWidth;
+      const height = svg.clientHeight;
+
+      const minVal = Math.min(...ecgData);
+      const maxVal = Math.max(...ecgData);
+      const range = maxVal - minVal || 1;
+
+      const points = ecgData.map((val, i) => {
+        const x = 30 + (i / ecgData.length) * (width - 60);
+        const y = height - 30 - ((val - minVal) / range) * (height - 60);
+        return [x, y].join(',');
+      }).join(' ');
+
+      document.getElementById('signalPath').setAttribute('points', points);
+    }
+
+    function updateDataTable() {
+      if (ecgData.length === 0) {
+        document.getElementById('sampleCount').textContent = '0';
+        return;
+      }
+
+      const min = Math.min(...ecgData);
+      const max = Math.max(...ecgData);
+      const range = max - min;
+
+      document.getElementById('sampleCount').textContent = ecgData.length;
+      document.getElementById('minVolt').textContent = min.toFixed(2) + ' mV';
+      document.getElementById('maxVolt').textContent = max.toFixed(2) + ' mV';
+      document.getElementById('rangeVolt').textContent = range.toFixed(2) + ' mV';
+    }
+
+    async function predictArrhythmia() {
+      if (ecgData.length === 0) {
+        alert('Load a sample ECG first');
+        return;
+      }
+
+      document.getElementById('statusBox').style.display = 'block';
+      document.getElementById('statusText').textContent = 'PROCESSING...';
+
+      const start = Date.now();
+      try {
+        const response = await fetch('/predict', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ecg: ecgData})
+        });
+        const inferenceTime = Date.now() - start;
+
+        const result = await response.json();
+        const normalProb = result.normal_prob;
+        const arrhythmiaProb = result.arrhythmia_prob;
+        const confidence = Math.max(normalProb, arrhythmiaProb) * 100;
+
+        document.getElementById('predClass').textContent = result.prediction;
+        document.getElementById('probNormal').textContent = (normalProb * 100).toFixed(2) + '%';
+        document.getElementById('probArrhythmia').textContent = (arrhythmiaProb * 100).toFixed(2) + '%';
+        document.getElementById('inferenceTime').textContent = inferenceTime + ' ms';
+        document.getElementById('confidence').textContent = confidence.toFixed(2) + '%';
+
+        document.getElementById('resultBox').classList.add('active');
+
+        if (result.prediction === 'Normal') {
+          document.getElementById('statusBox').classList.add('normal');
+          document.getElementById('statusBox').classList.remove('arrhythmia');
+          document.getElementById('statusText').textContent = 'NORMAL RHYTHM';
+        } else {
+          document.getElementById('statusBox').classList.add('arrhythmia');
+          document.getElementById('statusBox').classList.remove('normal');
+          document.getElementById('statusText').textContent = 'ARRHYTHMIA DETECTED';
+        }
+
+        lastAnalysisTime = new Date().toLocaleTimeString();
+        document.getElementById('lastAnalysis').textContent = lastAnalysisTime;
+
+      } catch (err) {
+        document.getElementById('statusText').textContent = 'ERROR: ' + err.message;
+        document.getElementById('statusBox').style.borderLeft = '4px solid #cc0000';
+      }
+    }
+
+    window.onload = function () {
+      document.getElementById('systemStatus').textContent = 'Online';
+    };
+  </script>
+
+</body>
+
+</html>
