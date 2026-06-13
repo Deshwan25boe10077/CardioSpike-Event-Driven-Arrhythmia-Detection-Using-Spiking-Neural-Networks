@@ -1,0 +1,41 @@
+CardioSpike/
+│
+├── data/
+│   ├── raw/
+│   ├── processed/
+│   └── spike_trains/
+│
+├── preprocessing/
+│   ├── signal_processing.py
+│   ├── spike_encoding.py
+│   └── feature_extraction.py
+│
+├── models/
+│   ├── snn_model.py
+│   ├── layers.py
+│   └── neuron_models.py
+│
+├── training/
+│   ├── train.py
+│   ├── trainer.py
+│   └── loss_functions.py
+│
+├── evaluation/
+│   ├── evaluate.py
+│   ├── metrics.py
+│   └── confusion_matrix.py
+│
+├── deployment/
+│   └── inference.py
+│
+├── notebooks/
+│
+├── results/
+│   ├── figures/
+│   ├── logs/
+│   └── metrics/
+│
+├── requirements.txt
+├── README.md
+├── LICENSE
+└── .gitignore
