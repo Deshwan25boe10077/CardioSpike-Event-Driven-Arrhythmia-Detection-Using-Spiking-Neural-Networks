@@ -103,13 +103,17 @@ This project can be trained using publicly available ECG datasets.
 MIT-BIH Arrhythmia Database
 
 •	48 annotated ECG recordings 
+
 •	Sampling Frequency: 360 Hz 
+
 •	Widely used benchmark dataset 
 
 PTB Diagnostic ECG Database
 
 •	Diagnostic ECG recordings 
+
 •	Multiple cardiac conditions 
+
 •	Suitable for classification tasks 
 
 PhysioNet Databases
