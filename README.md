@@ -128,6 +128,7 @@ Expected Results:
   - Validation Accuracy: >95%
   - Training Time: ~2-3 minutes (CPU)
 
+![training gif](ezgif-4c1b92ec0ca41997.gif)
 
 API ENDPOINTS
 -------------
