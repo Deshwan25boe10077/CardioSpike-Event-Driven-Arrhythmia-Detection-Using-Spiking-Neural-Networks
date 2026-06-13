@@ -11,6 +11,7 @@ them as either normal cardiac rhythm or abnormal (arrhythmia).
 Technical: Convolutional Neural Network (CNN) on 1D ECG signals (500 samples).
 No SNNs in current MVP - standard CNN for reliability and speed.
 
+![Demo gif](ezgif-6b70e560910e0b60.gif)
 
 INSTALLATION
 ------------
