@@ -96,16 +96,27 @@ These characteristics make SNNs highly suitable for wearable healthcare applicat
                         ▼
                 Predicted Class
 
-📊 Dataset
+##📊 Dataset
 
 This project can be trained using publicly available ECG datasets.
 
 MIT-BIH Arrhythmia Database
-48 annotated ECG recordings
-Sampling Frequency: 360 Hz
-Widely used benchmark dataset
+
+•	48 annotated ECG recordings 
+•	Sampling Frequency: 360 Hz 
+•	Widely used benchmark dataset 
+
 PTB Diagnostic ECG Database
-Diagnostic ECG recordings
+
+•	Diagnostic ECG recordings 
+•	Multiple cardiac conditions 
+•	Suitable for classification tasks 
+
+PhysioNet Databases
+
+Provides several clinically validated ECG datasets.
+
+
 Multiple cardiac conditions
 Suitable for classification tasks
 PhysioNet Databases
