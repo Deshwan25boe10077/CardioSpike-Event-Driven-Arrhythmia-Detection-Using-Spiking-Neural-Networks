@@ -267,6 +267,7 @@ Last Updated: June 2026
 Version: 1.0 MVP
 
 team lead            : DESHWAN TD   deshwan.25boe10077@vitbhopal.ac.in
+
 full stack developer : KOWSHIK R    kowshik.25mim10158@vitbhopal.ac.in
 
 
